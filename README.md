@@ -1,8 +1,8 @@
 # danmaku-viewer
-NicoNico Live  viewer with weizhenye's [Danmaku](https://github.com/weizhenye/Danmaku)  
+NicoNico Live  viewer with [weizhenye/Danmaku](https://github.com/weizhenye/Danmaku)  
 
 ニコ生の録画ファイルをコメント付きで再生するプレイヤーです。ブラウザで動作します。  
-コメントの表示には weizhenye の [Danmaku](https://github.com/weizhenye/Danmaku) を使用しています。
+コメントの表示には [weizhenye/Danmaku](https://github.com/weizhenye/Danmaku) を使用しています。
 
 ![動作例](https://github.com/shinosaki/danmaku-viewer/assets/88357168/fc19be65-5e17-4d82-8c68-b20f3cd96a27)
 
