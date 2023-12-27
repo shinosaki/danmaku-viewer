@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js"></script>
+  <style>
+    #container > div {
+      width: auto !important;
+      height: 100% !important;
+    }
+    #container > div > div {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      opacity: 1;
+      -webkit-text-stroke: 1.2px rgba(0, 0, 0, 0.6)
+    }
+  </style>
+</head>
+<body>
+  <div id="input" style="border: 4px dashed gray; display: flex; justify-content: center;">
+    <input id="inputDummy" type="file" multiple style="display: none;">
+    <p style="margin: 1rem; pointer-events: none; user-select: none;">動画ファイル / コメントファイル(json形式)</p>
+  </div>
+
+  <div id="container" style="margin-top: 1rem; width: 100%; aspect-ratio: 16 / 9; position: relative;">
+    <video id="video" controls  style="width: 100%; height: 100%; position: absolute;">
+    </video>
+  </div>
+
+  <script type="module">
+    const container = document.getElementById('container')
+    const video = document.getElementById('video')
+    const input = document.getElementById('input')
+    const inputDummy = document.getElementById('inputDummy')
+    let danmaku
+
+    ['dragenter', 'dragover', 'dragleave', 'drop']
+      .map(event => input.addEventListener(event, e => e.preventDefault()))
+
+    window.addEventListener('keydown', e => {
+      if (e.keyCode === 70) { // Press "F"
+        (!document.fullscreenElement) ? container.requestFullscreen() : document.exitFullscreen()
+      }
+    })
+
+    input.addEventListener('dragenter', e => input.style.backgroundColor = 'rgba(125, 211, 252, 0.5)')
+    input.addEventListener('dragleave', e => input.style.backgroundColor = '')
+
+    input.addEventListener('click', e => inputDummy.click())
+
+    input.addEventListener('drop', e => inputHandler(e))
+    inputDummy.addEventListener('change', e => inputHandler(e))
+
+    const inputHandler = async e => {
+      input.style.backgroundColor = ''
+
+      for (const file of e.dataTransfer?.files ?? e.target?.files) {
+        const url = URL.createObjectURL(file)
+
+        if (file.type.startsWith('video')) {
+          video.src = url
+        }
+        if (file.type === 'application/json') {
+          const json = await fetch(url).then(r => r.json())
+          const comments = json.filter(v => v.chat)
+            .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+
+          if (danmaku) danmaku.destroy()
+          danmaku = new Danmaku({ comments, container, media: video })
+        }
+      }
+    }
+  </script>
+</body>
+</html>
