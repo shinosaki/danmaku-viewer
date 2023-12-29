@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <script src="https://cdn.jsdelivr.net/npm/danmaku/dist/danmaku.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-youtube@1.1.0/html5-youtube.min.js"></script>
+
   <style>
     #container > div {
       width: auto !important;
@@ -24,6 +27,10 @@
     <p style="margin: 1rem; pointer-events: none; user-select: none;">動画ファイル / コメントファイル(json形式)</p>
   </div>
 
+  <label>Youtube ID:
+    <input id="urlBox" type="text" placeholder="jNQXAC9IVRw">
+  </label>
+
   <div id="container" style="margin-top: 1rem; width: 100%; aspect-ratio: 16 / 9; position: relative;">
     <video id="video" controls  style="width: 100%; height: 100%; position: absolute;">
     </video>
@@ -32,17 +39,23 @@
   <script type="module">
     const container = document.getElementById('container')
     const video = document.getElementById('video')
+    const urlBox = document.getElementById('urlBox')
     const input = document.getElementById('input')
     const inputDummy = document.getElementById('inputDummy')
-    let danmaku
+    let danmaku, player
 
-    ['dragenter', 'dragover', 'dragleave', 'drop']
-      .map(event => input.addEventListener(event, e => e.preventDefault()))
+    ['dragenter', 'dragover', 'dragleave', 'drop'].map(event =>
+      input.addEventListener(event, e => e.preventDefault())
+    )
 
     window.addEventListener('keydown', e => {
       if (e.keyCode === 70) { // Press "F"
         (!document.fullscreenElement) ? container.requestFullscreen() : document.exitFullscreen()
       }
+    })
+
+    urlBox.addEventListener('change', e => {
+      player = youtube({ id: e.target.value, el: video })
     })
 
     input.addEventListener('dragenter', e => input.style.backgroundColor = 'rgba(125, 211, 252, 0.5)')
@@ -60,6 +73,7 @@
         const url = URL.createObjectURL(file)
 
         if (file.type.startsWith('video')) {
+          if (player) player.destroy()
           video.src = url
         }
         if (file.type === 'application/json') {
@@ -68,7 +82,7 @@
             .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
 
           if (danmaku) danmaku.destroy()
-          danmaku = new Danmaku({ comments, container, media: video })
+          danmaku = new Danmaku({ comments, container, media: (player?.duration) ? player : video })
         }
       }
     }
