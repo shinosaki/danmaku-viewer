@@ -23,5 +23,8 @@ Drag and drop the video/comment files to the top of the page.
 ]
 ```
 
+### Youtube
+ページ上部の`Youtube ID`にYoutubeの動画ID(例:`jNQXAC9IVRw`)を入力した後、コメントファイルを選択することで、Youtube埋め込みプレイヤー上にコメントを表示できます。
+
 ## LICENSE
 [MIT](./LICENSE)
