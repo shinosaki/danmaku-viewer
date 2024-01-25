@@ -76,11 +76,26 @@
         if (file.type.startsWith('video')) {
           if (player) player.destroy()
           video.src = url
-        }
-        if (file.type === 'application/json') {
-          const json = await fetch(url).then(r => r.json())
-          const comments = json.filter(v => v.chat)
-            .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+        } else {
+          let comments
+
+          if (file.type === 'application/json') {
+            const json = await fetch(url).then(r => r.json())
+            comments = json.filter(v => v.chat)
+              .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+          }
+          if (file.type.endsWith('xml')) {
+            const xml = await fetch(url).then(r => r.text())
+            const dom = new DOMParser().parseFromString(xml, 'application/xml')
+            comments = [...dom.querySelectorAll('packet > chat')]
+              .map(e => {
+                const attributes = [...e.attributes].map(a => [a.name, a.value])
+                return {
+                  [e.tagName]: Object.fromEntries([['content', e.textContent], ...attributes])
+                }
+              })
+              .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+          }
 
           if (danmaku) danmaku.destroy()
           danmaku = new Danmaku({ comments, container, media: (player?.duration) ? player : video })
