@@ -82,7 +82,7 @@
           if (file.type === 'application/json') {
             const json = await fetch(url).then(r => r.json())
             comments = json.filter(v => v.chat)
-              .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+              .map(({ chat }) => ({ text: chat.content, time: chat.vpos ?? chat.@vpos / 100 }))
           }
           if (file.type.endsWith('xml')) {
             const xml = await fetch(url).then(r => r.text())
@@ -94,7 +94,7 @@
                   [e.tagName]: Object.fromEntries([['content', e.textContent], ...attributes])
                 }
               })
-              .map(({ chat }) => ({ text: chat.content, time: chat.vpos / 100 }))
+              .map(({ chat }) => ({ text: chat.content, time: chat.vpos ?? chat.@vpos / 100 }))
           }
 
           if (danmaku) danmaku.destroy()
