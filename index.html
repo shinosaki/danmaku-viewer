@@ -26,7 +26,7 @@
     const container = document.getElementById('container')
     const video = document.getElementById('video')
     const urlBox = document.getElementById('urlBox')
-	const fullscreenButton = document.getElementById('fullscreenButton')
+    const fullscreenButton = document.getElementById('fullscreenButton')
     const input = document.getElementById('input')
     const inputDummy = document.getElementById('inputDummy')
     let danmaku, player
@@ -38,8 +38,8 @@
     ['dragenter', 'dragover', 'dragleave', 'drop'].map(event =>
       input.addEventListener(event, e => e.preventDefault())
     )
-	
-	window.addEventListener('click', e => fullscreenHandler())
+
+    fullscreenButton.addEventListener('click', e => fullscreenHandler())
 
     window.addEventListener('keydown', e => {
       if (e.keyCode === 70) { // Press "F"
