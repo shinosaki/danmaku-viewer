@@ -21,29 +21,12 @@
       -webkit-text-stroke: 1.2px rgba(0, 0, 0, 0.6)
     }
   </style>
-</head>
-<body>
-  <div id="input" style="border: 4px dashed gray; display: flex; justify-content: center;">
-    <input id="inputDummy" type="file" multiple style="display: none;">
-    <p style="margin: 1rem; pointer-events: none; user-select: none;">動画ファイル / コメントファイル(json形式)</p>
-  </div>
-
-  <label>Youtube ID:
-    <input id="urlBox" type="text" placeholder="jNQXAC9IVRw">
-  </label>
-  <label>
-    <button onClick="fullscreenHandler">Full screen</button>
-  </label>
-
-  <div id="container" style="margin-top: 1rem; width: 100%; aspect-ratio: 16 / 9; position: relative;">
-    <video id="video" controls  style="width: 100%; height: 100%; position: absolute;">
-    </video>
-  </div>
 
   <script type="module">
     const container = document.getElementById('container')
     const video = document.getElementById('video')
     const urlBox = document.getElementById('urlBox')
+	const fullscreenButton = document.getElementById('fullscreenButton')
     const input = document.getElementById('input')
     const inputDummy = document.getElementById('inputDummy')
     let danmaku, player
@@ -55,6 +38,8 @@
     ['dragenter', 'dragover', 'dragleave', 'drop'].map(event =>
       input.addEventListener(event, e => e.preventDefault())
     )
+	
+	window.addEventListener('click', e => fullscreenHandler())
 
     window.addEventListener('keydown', e => {
       if (e.keyCode === 70) { // Press "F"
@@ -110,5 +95,23 @@
       }
     }
   </script>
+</head>
+<body>
+  <div id="input" style="border: 4px dashed gray; display: flex; justify-content: center;">
+    <input id="inputDummy" type="file" multiple style="display: none;">
+    <p style="margin: 1rem; pointer-events: none; user-select: none;">動画ファイル / コメントファイル(json形式)</p>
+  </div>
+
+  <label>Youtube ID:
+    <input id="urlBox" type="text" placeholder="jNQXAC9IVRw">
+  </label>
+  <label>
+    <button id="fullscreenButton">Full screen</button>
+  </label>
+
+  <div id="container" style="margin-top: 1rem; width: 100%; aspect-ratio: 16 / 9; position: relative;">
+    <video id="video" controls  style="width: 100%; height: 100%; position: absolute;">
+    </video>
+  </div>
 </body>
 </html>
