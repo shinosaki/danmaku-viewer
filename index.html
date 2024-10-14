@@ -77,7 +77,7 @@
             comments = json.filter(v => v.chat)
               .map(({ chat }) => ({
                 text: chat.content,
-                time: (chat.vpos ?? chat['@vpos'] / 100) + delay
+                time: (chat.vpos ?? chat['@vpos'] / 100) - delay
               }))
           }
           if (file.type.endsWith('xml')) {
@@ -92,7 +92,7 @@
               })
               .map(({ chat }) => ({
                 text: chat.content,
-                time: (chat.vpos ?? chat['@vpos'] / 100) + delay
+                time: (chat.vpos ?? chat['@vpos'] / 100) - delay
               }))
           }
 
